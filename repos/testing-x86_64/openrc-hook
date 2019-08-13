@@ -30,12 +30,17 @@ each_conf() {
   done
 }
 
-case $1 in
+op="$1"; shift
+
+case $op in
   sysctl)   openrc_live; each_conf /usr/bin/sysctl -q -p ;;
   binfmt)   openrc_live; /usr/lib/openrc/sh/binfmt.sh ;;
   add) svc_add_help ;;
   del) svc_del_help ;;
-  *) echo >&2 "  Invalid operation '$1'"; exit 1 ;;
+#   init-reload) systemd_live; /usr/bin/openrc-shutdown -R ;;
+    # For use by other packages
+  reload)        openrc_live; /usr/bin/rc-service "$@" reload ;;
+  *) echo >&2 "  Invalid operation '$op'"; exit 1 ;;
 esac
 
 exit 0
