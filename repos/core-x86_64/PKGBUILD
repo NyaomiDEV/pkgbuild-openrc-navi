@@ -7,13 +7,13 @@ _url="https://github.com/OpenRC/openrc/archive"
 pkgbase=openrc
 pkgname=('openrc' 'openrc-bash-completions' 'openrc-zsh-completions')
 pkgver=0.42.1
-pkgrel=3
+pkgrel=4
 pkgdesc="Gentoo's universal init system"
 arch=('x86_64')
 url="http://www.gentoo.org/proj/en/base/openrc/"
 license=('BSD2')
-makedepends=('psmisc' 'pam' 'netifrc' 'opentmpfiles-openrc'
-            'opensysusers-openrc' 'elogind-openrc' 'zsh')
+makedepends=('psmisc' 'pam' 'netifrc' 'opentmpfiles'
+            'elogind-openrc' 'zsh')
 source=("${pkgbase}-${pkgver}.tar.gz::${_url}/${pkgver}.tar.gz"
         "${pkgbase}.logrotate"
         'openrc-hook'
@@ -22,7 +22,12 @@ source=("${pkgbase}-${pkgver}.tar.gz::${_url}/${pkgver}.tar.gz"
         'openrc-remove.hook'
         '30-sysctl.hook'
         'sysctl.conf'
-        '30-binfmt.hook')
+        '30-binfmt.hook'
+        'opentmpfiles-dev.initd'
+        'opentmpfiles-setup.initd'
+        'opentmpfiles-dev.confd'
+        'opentmpfiles-setup.confd'
+        'opensysusers.initd')
 sha256sums=('91a01ca6d930a0688fb91338209985de57cac7aa2d37feddacb78fd3d95308e2'
             '0b44210db9770588bd491cd6c0ac9412d99124c6be4c9d3f7d31ec8746072f5c'
             'eb5d05a733d3dd16682397c92a8bafe548b10c019ab15c0fab69583d78a5f46e'
@@ -31,7 +36,12 @@ sha256sums=('91a01ca6d930a0688fb91338209985de57cac7aa2d37feddacb78fd3d95308e2'
             'a636d63fa753420cfbcaf451f97f68897e98d471a6f516b8edc14f509e42c013'
             'cb5bc649c2c9998300aff1e9862a9404b44e53178d153d68288603e99c5aaefe'
             '4170bcf3655ff6fb32b35fc592a4294a64d25df98d2f0f09f467689ed1ad54ea'
-            '080cd9e1922e5c893adad10849e1dcc8a1ee2e1b49d6d1d18441f83a6960ae91')
+            '080cd9e1922e5c893adad10849e1dcc8a1ee2e1b49d6d1d18441f83a6960ae91'
+            'c357e37ef59845954add9ccf89eff07beae0bd5274fdaa3ebf32da61c9d38436'
+            '68779b6f4d8f4bcc206ff0e7ddab2c4cbff029727404cffa94079c1bf06094c8'
+            '505b7fa013d90b1775439c06b6b0d420f877768cc59eaff5ffb1493a9e28b4ba'
+            '505b7fa013d90b1775439c06b6b0d420f877768cc59eaff5ffb1493a9e28b4ba'
+            '6476fd66ead2ad43129e3135656f4fde64addddabb6b7405665b3cf8db4aa6ad')
 
 _args=(
     SYSCONFDIR=/etc
@@ -42,7 +52,7 @@ _args=(
     MKPAM=pam
     MKTERMCAP=ncurses
     MKNET=no
-    MKSYSVINIT=no
+    MKSYSVINIT=yes
     MKBASHCOMP=yes
     MKZSHCOMP=yes
     MKPKGCONFIG=yes
@@ -71,7 +81,7 @@ build(){
 }
 
 package_openrc() {
-    depends=('psmisc' 'pam' 'opentmpfiles-openrc' 'opensysusers-openrc' 'netifrc' 'elogind-openrc')
+    depends=('psmisc' 'pam' 'opentmpfiles' 'netifrc' 'elogind-openrc')
     optdepends=('networkmanager-openrc: NetworkManager')
     install=${pkgname}.install
     backup=('etc/rc.conf'
@@ -80,9 +90,13 @@ package_openrc() {
             'etc/conf.d/hostname'
             'etc/conf.d/modules'
             'etc/conf.d/hwclock'
+            'etc/conf.d/opentmpfiles-dev'
+            'etc/conf.d/opentmpfiles-setup'
             etc/conf.d/agetty.tty{1,2,3,4,5,6})
-    provides=('svc-manager')
-    conflicts=('svc-manager')
+    provides=('svc-manager' 'init-opensysusers' 'init-opentmpfiles')
+    conflicts=('svc-manager' 'init-opensysusers' 'init-opentmpfiles'
+                'opentmpfiles-openrc' 'opensysusers-openrc')
+    replaces=('opentmpfiles-openrc' 'opensysusers-openrc')
 
     cd "${srcdir}/${pkgbase}-${pkgver}"
 
@@ -127,6 +141,22 @@ package_openrc() {
     # split zsh completions
     install -d ${srcdir}/_zsh/usr/share/zsh/site-functions
     mv -v ${pkgdir}/usr/share/zsh/site-functions/* ${srcdir}/_zsh/usr/share/zsh/site-functions
+
+    # remove init symlink
+    rm -v ${pkgdir}/usr/bin/init
+
+    # sysusers & tmpfiles
+    install -m755 ${srcdir}/opentmpfiles-dev.confd ${pkgdir}/etc/conf.d/opentmpfiles-dev
+    install -m755 ${srcdir}/opentmpfiles-dev.initd ${pkgdir}/etc/init.d/opentmpfiles-dev
+
+    install -m755 ${srcdir}/opentmpfiles-setup.confd ${pkgdir}/etc/conf.d/opentmpfiles-setup
+    install -m755 ${srcdir}/opentmpfiles-setup.initd ${pkgdir}/etc/init.d/opentmpfiles-setup
+
+    install -m755 ${srcdir}/opensysusers.initd ${pkgdir}/etc/init.d/opensysusers
+
+    ln -snf /etc/init.d/opensysusers "${pkgdir}"/etc/runlevels/boot/opensysusers
+    ln -snf /etc/init.d/opentmpfiles-dev "${pkgdir}"/etc/runlevels/sysinit/opentmpfiles-dev
+    ln -snf /etc/init.d/opentmpfiles-setup "${pkgdir}"/etc/runlevels/boot/opentmpfiles-setup
 }
 
 package_openrc-bash-completions() {

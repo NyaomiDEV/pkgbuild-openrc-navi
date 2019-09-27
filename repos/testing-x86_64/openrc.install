@@ -1,3 +1,0 @@
-post_install() {
-        echo "	==> Install one of the optional depends for network support!"
-}
