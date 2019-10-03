@@ -8,3 +8,4 @@ Target = usr/lib/binfmt.d/*.conf
 Description = Registering binary formats...
 When = PostTransaction
 Exec = /usr/share/libalpm/scripts/openrc-hook binfmt
+NeedsTargets

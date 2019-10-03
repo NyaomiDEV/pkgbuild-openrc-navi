@@ -34,7 +34,7 @@ op="$1"; shift
 
 case $op in
   sysctl)   openrc_live; each_conf /usr/bin/sysctl -q -p ;;
-  binfmt)   openrc_live; /usr/lib/openrc/sh/binfmt.sh ;;
+  binfmt)   openrc_live; each_conf /usr/lib/openrc/sh/binfmt.sh ;;
   reexec) openrc_live; /usr/bin/openrc-shutdown -R ;;
     # For use by other packages
   reload)        openrc_live; /usr/bin/rc-service "$@" reload ;;

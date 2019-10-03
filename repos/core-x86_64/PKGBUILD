@@ -7,7 +7,7 @@ _url="https://github.com/OpenRC/openrc/archive"
 pkgbase=openrc
 pkgname=('openrc' 'openrc-bash-completions' 'openrc-zsh-completions')
 pkgver=0.42.1
-pkgrel=4
+pkgrel=5
 pkgdesc="Gentoo's universal init system"
 arch=('x86_64')
 url="http://www.gentoo.org/proj/en/base/openrc/"
@@ -27,21 +27,23 @@ source=("${pkgbase}-${pkgver}.tar.gz::${_url}/${pkgver}.tar.gz"
         'opentmpfiles-setup.initd'
         'opentmpfiles-dev.confd'
         'opentmpfiles-setup.confd'
-        'opensysusers.initd')
+        'opensysusers.initd'
+        'binfmt-sh.patch')
 sha256sums=('91a01ca6d930a0688fb91338209985de57cac7aa2d37feddacb78fd3d95308e2'
             '0b44210db9770588bd491cd6c0ac9412d99124c6be4c9d3f7d31ec8746072f5c'
-            'eb5d05a733d3dd16682397c92a8bafe548b10c019ab15c0fab69583d78a5f46e'
+            'e405597cced825154afde5c5521403e509ae36c3f8ca7bab6e79d63734b13919'
             '385d16b3133b53c459a3910a739304cd009478e37b5550f4ce698f7deea774f0'
             '3ef8682540a038c239c4e07881cb084501d7996df2e0395b70a0a3953c7d00b2'
             'a636d63fa753420cfbcaf451f97f68897e98d471a6f516b8edc14f509e42c013'
             'cb5bc649c2c9998300aff1e9862a9404b44e53178d153d68288603e99c5aaefe'
             '4170bcf3655ff6fb32b35fc592a4294a64d25df98d2f0f09f467689ed1ad54ea'
-            '080cd9e1922e5c893adad10849e1dcc8a1ee2e1b49d6d1d18441f83a6960ae91'
+            '1f4cd15749ff89fd564e216ff0c1f9ff085e0200dba24d74e3de948f681bd80f'
             'c357e37ef59845954add9ccf89eff07beae0bd5274fdaa3ebf32da61c9d38436'
             '68779b6f4d8f4bcc206ff0e7ddab2c4cbff029727404cffa94079c1bf06094c8'
             '505b7fa013d90b1775439c06b6b0d420f877768cc59eaff5ffb1493a9e28b4ba'
             '505b7fa013d90b1775439c06b6b0d420f877768cc59eaff5ffb1493a9e28b4ba'
-            '6476fd66ead2ad43129e3135656f4fde64addddabb6b7405665b3cf8db4aa6ad')
+            '6476fd66ead2ad43129e3135656f4fde64addddabb6b7405665b3cf8db4aa6ad'
+            '3680546deb196de39a2ea4f7a3b30977773be011cc1f0285e64015f41c18e853')
 
 _args=(
     SYSCONFDIR=/etc
@@ -68,6 +70,7 @@ fi
 prepare(){
     cd "${srcdir}/${pkgbase}-${pkgver}"
     sed -i 's:0444:0644:' mk/sys.mk
+    patch -Np 1 -i ../binfmt-sh.patch
 }
 
 check(){
