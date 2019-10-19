@@ -1,0 +1,18 @@
+0a6df09c5bb82bf964177dd3e1c03cb9cf7a8c42
+ sh/binfmt.sh.in | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/sh/binfmt.sh.in b/sh/binfmt.sh.in
+index ca4a8833..34d6d5e3 100644
+--- a/sh/binfmt.sh.in
++++ b/sh/binfmt.sh.in
+@@ -29,6 +29,9 @@ apply_file() {
+ 			\;*) continue ;;
+ 		esac
+
++		local reg=${line#*:}
++        [ -e /proc/sys/fs/binfmt_misc/${reg%%:*} ] && echo -1 > /proc/sys/fs/binfmt_misc/${reg%%:*}
++
+ 		echo "${line}" > /proc/sys/fs/binfmt_misc/register
+ 		rc=$?
+ 		if [ $rc -ne 0 ]; then
