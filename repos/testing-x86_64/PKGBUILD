@@ -7,7 +7,7 @@ _url="https://github.com/OpenRC/openrc/archive"
 pkgbase=openrc
 pkgname=('openrc' 'openrc-bash-completions' 'openrc-zsh-completions')
 pkgver=0.42.1
-pkgrel=7
+pkgrel=8
 pkgdesc="Gentoo's universal init system"
 arch=('x86_64')
 url="http://www.gentoo.org/proj/en/base/openrc/"
@@ -27,6 +27,7 @@ source=("${pkgbase}-${pkgver}.tar.gz::${_url}/${pkgver}.tar.gz"
         'opentmpfiles-dev.confd'
         'opentmpfiles-setup.confd'
         'opensysusers.initd'
+        'kmod-static-nodes.initd'
         'binfmt-sh.patch')
 sha256sums=('91a01ca6d930a0688fb91338209985de57cac7aa2d37feddacb78fd3d95308e2'
             '0b44210db9770588bd491cd6c0ac9412d99124c6be4c9d3f7d31ec8746072f5c'
@@ -42,6 +43,7 @@ sha256sums=('91a01ca6d930a0688fb91338209985de57cac7aa2d37feddacb78fd3d95308e2'
             '505b7fa013d90b1775439c06b6b0d420f877768cc59eaff5ffb1493a9e28b4ba'
             '505b7fa013d90b1775439c06b6b0d420f877768cc59eaff5ffb1493a9e28b4ba'
             '6476fd66ead2ad43129e3135656f4fde64addddabb6b7405665b3cf8db4aa6ad'
+            '3ecbe7761b92a123a5a3d395ec3d9e090b0dfba7910a5987b4a2298c20a7e571'
             '3680546deb196de39a2ea4f7a3b30977773be011cc1f0285e64015f41c18e853')
 
 _args=(
@@ -78,7 +80,7 @@ check(){
 }
 
 build(){
-    cd "${srcdir}/${pkgbase}-${pkgver}"
+    cd "${pkgbase}-${pkgver}"
     make "${_args[@]}"
 }
 
@@ -96,16 +98,16 @@ package_openrc() {
             'etc/conf.d/opentmpfiles-setup'
             etc/conf.d/agetty.tty{1,2,3,4,5,6})
     provides=('librc.so' 'libeinfo.so' 'svc-manager'
-            'init-opensysusers' 'init-opentmpfiles')
-    conflicts=('svc-manager' 'init-opensysusers' 'init-opentmpfiles'
-                'opentmpfiles-openrc' 'opensysusers-openrc')
-    replaces=('opentmpfiles-openrc' 'opensysusers-openrc')
+            'init-opensysusers' 'init-opentmpfiles' 'init-kmod')
+    conflicts=('svc-manager' 'init-opensysusers' 'init-opentmpfiles' 'init-kmod'
+                'opentmpfiles-openrc' 'opensysusers-openrc' 'kmod-openrc')
+    replaces=('opentmpfiles-openrc' 'opensysusers-openrc' 'kmod-openrc')
 
-    cd "${srcdir}/${pkgbase}-${pkgver}"
+    cd "${pkgbase}-${pkgver}"
 
     make DESTDIR="${pkgdir}" "${_args[@]}" install
 
-    install -Dm644 "${srcdir}/${pkgbase}.logrotate" "${pkgdir}/etc/logrotate.d/${pkgbase}"
+    install -Dm644 "${srcdir}/${pkgbase}".logrotate "${pkgdir}"/etc/logrotate.d/"${pkgbase}"
 
     sed -e 's/#unicode="NO"/unicode="YES"/' \
         -e 's/#rc_logger="NO"/rc_logger="YES"/' \
@@ -113,7 +115,7 @@ package_openrc() {
         -e 's|#rc_shell=/bin/sh|rc_shell=/usr/bin/sulogin|' \
         -i "${pkgdir}/etc/rc.conf"
 
-    install -d ${pkgdir}/usr/lib/{openrc/cache,binfmt.d,sysctl.d}
+    install -d "${pkgdir}"/usr/lib/{openrc/cache,binfmt.d,sysctl.d}
 
     # getty
     sed -e 's|#baud=""|baud="38400"|' \
@@ -128,50 +130,54 @@ package_openrc() {
     done
 
     # sysctl defaults
-    install -m755 ${srcdir}/sysctl.conf "$pkgdir"/usr/lib/sysctl.d/50-default.conf
+    install -m755 "${srcdir}"/sysctl.conf "${pkgdir}"/usr/lib/sysctl.d/50-default.conf
 
     # pacman hooks
-    install -Dm755 ${srcdir}/openrc-hook "$pkgdir"/usr/share/libalpm/scripts/openrc-hook
-    install -Dm644 -t "$pkgdir"/usr/share/libalpm/hooks ${srcdir}/*.hook
+    install -Dm755 "${srcdir}"/openrc-hook "${pkgdir}"/usr/share/libalpm/scripts/openrc-hook
+    install -Dm644 -t "${pkgdir}"/usr/share/libalpm/hooks "${srcdir}"/*.hook
 
     # license
-    install -Dm644 ${srcdir}/${pkgname}-${pkgver}/LICENSE "$pkgdir/usr/share/licenses/${pkgbase}/LICENSE"
+    install -Dm644 LICENSE "${pkgdir}"/usr/share/licenses/"${pkgbase}"/LICENSE
 
     # split bash completions
-    install -d ${srcdir}/_bash-completion/usr/share/bash-completion/completions
-    mv -v ${pkgdir}/usr/share/bash-completion/completions/* ${srcdir}/_bash-completion/usr/share/bash-completion/completions
+    install -d "${srcdir}"/_bash-completion/usr/share/bash-completion/completions
+    mv -v "${pkgdir}"/usr/share/bash-completion/completions/* "${srcdir}"/_bash-completion/usr/share/bash-completion/completions
 
     # split zsh completions
-    install -d ${srcdir}/_zsh/usr/share/zsh/site-functions
-    mv -v ${pkgdir}/usr/share/zsh/site-functions/* ${srcdir}/_zsh/usr/share/zsh/site-functions
+    install -d "${srcdir}"/_zsh/usr/share/zsh/site-functions
+    mv -v "${pkgdir}"/usr/share/zsh/site-functions/* "${srcdir}"/_zsh/usr/share/zsh/site-functions
 
     # remove init symlink
-    rm -v ${pkgdir}/usr/bin/init
+    rm -v "${pkgdir}"/usr/bin/init
 
     # sysusers & tmpfiles
-    install -m755 ${srcdir}/opentmpfiles-dev.confd ${pkgdir}/etc/conf.d/opentmpfiles-dev
-    install -m755 ${srcdir}/opentmpfiles-dev.initd ${pkgdir}/etc/init.d/opentmpfiles-dev
+    install -m755 "${srcdir}"/opentmpfiles-dev.confd "${pkgdir}"/etc/conf.d/opentmpfiles-dev
+    install -m755 "${srcdir}"/opentmpfiles-dev.initd "${pkgdir}"/etc/init.d/opentmpfiles-dev
 
-    install -m755 ${srcdir}/opentmpfiles-setup.confd ${pkgdir}/etc/conf.d/opentmpfiles-setup
-    install -m755 ${srcdir}/opentmpfiles-setup.initd ${pkgdir}/etc/init.d/opentmpfiles-setup
+    install -m755 "${srcdir}"/opentmpfiles-setup.confd "${pkgdir}"/etc/conf.d/opentmpfiles-setup
+    install -m755 "${srcdir}"/opentmpfiles-setup.initd "${pkgdir}"/etc/init.d/opentmpfiles-setup
 
-    install -m755 ${srcdir}/opensysusers.initd ${pkgdir}/etc/init.d/opensysusers
+    install -m755 "${srcdir}"/opensysusers.initd "${pkgdir}"/etc/init.d/opensysusers
 
     ln -snf /etc/init.d/opensysusers "${pkgdir}"/etc/runlevels/boot/opensysusers
     ln -snf /etc/init.d/opentmpfiles-dev "${pkgdir}"/etc/runlevels/sysinit/opentmpfiles-dev
     ln -snf /etc/init.d/opentmpfiles-setup "${pkgdir}"/etc/runlevels/boot/opentmpfiles-setup
+
+    # kmod staticc nodes
+    install -m755 "${srcdir}"/kmod-static-nodes.initd "${pkgdir}"/etc/init.d/kmod-static-nodes
+    ln -snf /etc/init.d/kmod-static-nodes "${pkgdir}"/etc/runlevels/sysinit/kmod-static-nodes
 }
 
 package_openrc-bash-completions() {
     depends=('openrc' 'bash')
     pkgdesc="OpenRC completions for Bash"
 
-    mv -v ${srcdir}/_bash-completion/* ${pkgdir}
+    mv -v "${srcdir}"/_bash-completion/* "${pkgdir}"
 }
 
 package_openrc-zsh-completions() {
     depends=('openrc' 'zsh')
     pkgdesc="OpenRC completions for ZSH"
 
-    mv -v ${srcdir}/_zsh/* ${pkgdir}
+    mv -v "${srcdir}"/_zsh/* "${pkgdir}"
 }
