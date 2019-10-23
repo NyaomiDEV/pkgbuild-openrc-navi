@@ -7,7 +7,7 @@ _url="https://github.com/OpenRC/openrc/archive"
 pkgbase=openrc
 pkgname=('openrc' 'openrc-bash-completions' 'openrc-zsh-completions')
 pkgver=0.42.1
-pkgrel=8
+pkgrel=9
 pkgdesc="Gentoo's universal init system"
 arch=('x86_64')
 url="http://www.gentoo.org/proj/en/base/openrc/"
@@ -97,9 +97,9 @@ package_openrc() {
             'etc/conf.d/opentmpfiles-dev'
             'etc/conf.d/opentmpfiles-setup'
             etc/conf.d/agetty.tty{1,2,3,4,5,6})
-    provides=('librc.so' 'libeinfo.so' 'svc-manager'
-            'init-opensysusers' 'init-opentmpfiles' 'init-kmod')
-    conflicts=('svc-manager' 'init-opensysusers' 'init-opentmpfiles' 'init-kmod'
+    provides=('librc.so' 'libeinfo.so'
+            'svc-manager' 'init-rc')
+    conflicts=('svc-manager' 'init-rc'
                 'opentmpfiles-openrc' 'opensysusers-openrc' 'kmod-openrc')
     replaces=('opentmpfiles-openrc' 'opensysusers-openrc' 'kmod-openrc')
 
