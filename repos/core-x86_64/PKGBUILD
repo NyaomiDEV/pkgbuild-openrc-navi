@@ -7,7 +7,7 @@ _url="https://github.com/OpenRC/openrc/archive"
 pkgbase=openrc
 pkgname=('openrc' 'openrc-bash-completions' 'openrc-zsh-completions')
 pkgver=0.42.1
-pkgrel=9
+pkgrel=10
 pkgdesc="Gentoo's universal init system"
 arch=('x86_64')
 url="http://www.gentoo.org/proj/en/base/openrc/"
@@ -85,7 +85,7 @@ build(){
 }
 
 package_openrc() {
-    depends=('psmisc' 'pam' 'opentmpfiles' 'netifrc')
+    depends=('psmisc' 'pam' 'opentmpfiles' 'netifrc' 'inetutils')
     optdepends=('networkmanager-openrc: networkmanager init script'
                 'elogind-openrc: elogind init script')
     backup=('etc/rc.conf'
