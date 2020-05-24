@@ -1,0 +1,9 @@
+[Trigger]
+Type = Package
+Operation = Upgrade
+Target = openrc
+
+[Action]
+Description = Reexecuting init ...
+When = PostTransaction
+Exec = /usr/share/libalpm/scripts/openrc-hook reexec
