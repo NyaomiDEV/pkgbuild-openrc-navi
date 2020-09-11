@@ -7,7 +7,7 @@ _url="https://github.com/OpenRC/openrc/archive"
 pkgbase=openrc
 pkgname=('openrc' 'openrc-bash-completions' 'openrc-zsh-completions')
 pkgver=0.42.1
-pkgrel=14
+pkgrel=15
 pkgdesc="Gentoo's universal init system"
 arch=('x86_64')
 url="http://www.gentoo.org/proj/en/base/openrc/"
@@ -39,7 +39,7 @@ sha256sums=('91a01ca6d930a0688fb91338209985de57cac7aa2d37feddacb78fd3d95308e2'
             '3ef8682540a038c239c4e07881cb084501d7996df2e0395b70a0a3953c7d00b2'
             '6c699cab557f689c7b9e333efa9e5029fe8e7b11d001ccd5c63bca2519d6d9e5'
             '28ec075d30096bd54499e994f76f8526460474f1e4c33607045c1a71b0684263'
-            '4170bcf3655ff6fb32b35fc592a4294a64d25df98d2f0f09f467689ed1ad54ea'
+            'a8b8fb3c5ca5d0af1be8641a4463880c3390b92fedd390329e1226f51f2e51b7'
             '28aa413fd78bca98bb23294eeb3f49149825a2c2f97a7ee10039385f5e8e50e9'
             '505b7fa013d90b1775439c06b6b0d420f877768cc59eaff5ffb1493a9e28b4ba'
             'c357e37ef59845954add9ccf89eff07beae0bd5274fdaa3ebf32da61c9d38436'
