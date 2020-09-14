@@ -7,12 +7,12 @@ _url="https://github.com/OpenRC/openrc/archive"
 pkgbase=openrc
 pkgname=('openrc' 'openrc-bash-completions' 'openrc-zsh-completions')
 pkgver=0.42.1
-pkgrel=13
+pkgrel=16
 pkgdesc="Gentoo's universal init system"
 arch=('x86_64')
 url="http://www.gentoo.org/proj/en/base/openrc/"
 license=('BSD2')
-makedepends=('psmisc' 'pam' 'netifrc' 'opentmpfiles' 'zsh')
+makedepends=('psmisc' 'pam' 'netifrc' 'zsh')
 source=("${pkgbase}-${pkgver}.tar.gz::${_url}/${pkgver}.tar.gz"
         "${pkgbase}.logrotate"
         'openrc-hook'
@@ -22,10 +22,8 @@ source=("${pkgbase}-${pkgver}.tar.gz::${_url}/${pkgver}.tar.gz"
         '30-sysctl.hook'
         'sysctl.conf'
         '30-binfmt.hook'
-        'opentmpfiles-dev.initd'
-        'opentmpfiles-setup.initd'
-        'opentmpfiles-dev.confd'
-        'opentmpfiles-setup.confd'
+        opentmpfiles-dev.{confd,initd}
+        opentmpfiles-setup.{confd,initd}
         'opensysusers.initd'
         'kmod-static-nodes.initd'
         gcc-10-fix.patch::https://github.com/OpenRC/openrc/commit/375ef42393f3dc6edbaa2cb70c79b2366072db38.patch
@@ -41,12 +39,12 @@ sha256sums=('91a01ca6d930a0688fb91338209985de57cac7aa2d37feddacb78fd3d95308e2'
             '3ef8682540a038c239c4e07881cb084501d7996df2e0395b70a0a3953c7d00b2'
             '6c699cab557f689c7b9e333efa9e5029fe8e7b11d001ccd5c63bca2519d6d9e5'
             '28ec075d30096bd54499e994f76f8526460474f1e4c33607045c1a71b0684263'
-            '4170bcf3655ff6fb32b35fc592a4294a64d25df98d2f0f09f467689ed1ad54ea'
+            '874e50bd217fef3a2e3d0a18eb316b9b3ddb109b93f3cbf45407170c5bec1d6d'
             '28aa413fd78bca98bb23294eeb3f49149825a2c2f97a7ee10039385f5e8e50e9'
+            '505b7fa013d90b1775439c06b6b0d420f877768cc59eaff5ffb1493a9e28b4ba'
             'c357e37ef59845954add9ccf89eff07beae0bd5274fdaa3ebf32da61c9d38436'
+            '505b7fa013d90b1775439c06b6b0d420f877768cc59eaff5ffb1493a9e28b4ba'
             '68779b6f4d8f4bcc206ff0e7ddab2c4cbff029727404cffa94079c1bf06094c8'
-            '505b7fa013d90b1775439c06b6b0d420f877768cc59eaff5ffb1493a9e28b4ba'
-            '505b7fa013d90b1775439c06b6b0d420f877768cc59eaff5ffb1493a9e28b4ba'
             '6476fd66ead2ad43129e3135656f4fde64addddabb6b7405665b3cf8db4aa6ad'
             '3ecbe7761b92a123a5a3d395ec3d9e090b0dfba7910a5987b4a2298c20a7e571'
             'addb1bf115b811fba3d120f5c68535ec07f32a55e570b661f1e5575f74327bac'
@@ -100,7 +98,7 @@ build(){
 }
 
 package_openrc() {
-    depends=('psmisc' 'pam' 'opentmpfiles' 'netifrc' 'inetutils')
+    depends=('psmisc' 'pam' 'netifrc' 'inetutils')
     optdepends=('networkmanager-openrc: networkmanager init script'
                 'elogind-openrc: elogind init script')
     backup=('etc/rc.conf'
