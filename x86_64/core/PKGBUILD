@@ -6,13 +6,13 @@ _url="https://github.com/OpenRC/openrc/archive"
 
 pkgbase=openrc
 pkgname=('openrc' 'openrc-bash-completions' 'openrc-zsh-completions')
-pkgver=0.42.1
-pkgrel=18
+pkgver=0.43
+pkgrel=1
 pkgdesc="Gentoo's universal init system"
 arch=('x86_64')
 url="http://www.gentoo.org/proj/en/base/openrc/"
 license=('BSD2')
-makedepends=('psmisc' 'pam' 'netifrc' 'zsh')
+makedepends=('psmisc' 'pam' 'netifrc' 'zsh' 'eudev' 'perl')
 source=("${pkgbase}-${pkgver}.tar.gz::${_url}/${pkgver}.tar.gz"
         "${pkgbase}.logrotate"
         'openrc-hook'
@@ -28,15 +28,8 @@ source=("${pkgbase}-${pkgver}.tar.gz::${_url}/${pkgver}.tar.gz"
         'kmod-static-nodes.initd'
         udev.{confd,initd}
         udev-settle.{confd,initd}
-        udev-trigger.{confd,initd}
-        gcc-10-fix.patch::https://github.com/OpenRC/openrc/commit/375ef42393f3dc6edbaa2cb70c79b2366072db38.patch
-        supervise-daemon-fix.patch::https://github.com/OpenRC/openrc/commit/6deda13754f1b60245945e953cce8d97e40e86fc.patch
-        openrc-shutdown-fix.patch::https://github.com/OpenRC/openrc/commit/fd852865e06a74ecf8b77ff534fa8053e020160f.patch
-        posix-compliant-grep.patch::https://github.com/OpenRC/openrc/commit/a7e7fd2b37a7666f26c2d4de9386b2d04f583b41.patch
-        binfmt-fix.patch::https://github.com/OpenRC/openrc/commit/eb610859519292c6164c4ba601d22e642c306beb.patch
-        cgroup2-verify.patch::https://github.com/OpenRC/openrc/commit/87cfad3d6cd619c6090e8209092448ae68279b0c.patch
-        supervise-log.patch::https://github.com/OpenRC/openrc/commit/2355f1a3f2a4fd62cac6d9af0e94c8731acd4c0f.patch)
-sha256sums=('91a01ca6d930a0688fb91338209985de57cac7aa2d37feddacb78fd3d95308e2'
+        udev-trigger.{confd,initd})
+sha256sums=('23a07d03208f49a7bfd767edb6b90bdeac8334bbe1b57a5af0c5e69555dea730'
             '0b44210db9770588bd491cd6c0ac9412d99124c6be4c9d3f7d31ec8746072f5c'
             'e405597cced825154afde5c5521403e509ae36c3f8ca7bab6e79d63734b13919'
             'd95237e2018f4a647770ef8a2e2f04d13edbdeccf117493d2d1b2424ede80eeb'
@@ -56,14 +49,7 @@ sha256sums=('91a01ca6d930a0688fb91338209985de57cac7aa2d37feddacb78fd3d95308e2'
             '2b79cbe451d0132dd8c381b9a1701162bd1eecfab6d1b3f729d7528f9b11327f'
             'e89315857de1ba62455b7ab93a9e20120ff20981aa3b9479a32dbf9be15926dd'
             '24579fea33a859ce031630a518c738a45535ba1a4699f0c89ef41ecaca8178fc'
-            '1642c64f2ad2929a602ab3c63e832c3ad3fab43ea636a6316c6de8308794b652'
-            'addb1bf115b811fba3d120f5c68535ec07f32a55e570b661f1e5575f74327bac'
-            '654dada5ffe56d6ae10d0ea4f9cb62c8c6c39a5398cd02561419a8bbf3f686b7'
-            '5576a8b6c9fbe79ede027ed053f922da60d1cbe818803677f5aa5532f98ffac4'
-            '46f6e809aabb629212a739af7f5177930e9c4a7f2adfdfc59911d778d3716ec9'
-            '7e5d7dc888327ef99637fa7207ac9470d72cc37198ddd7ba2cdf72d10a1c7031'
-            '41c6598da76bcdcdc8d9349f559bc6b587a6f6dec55bf7c79669af2b28af43e1'
-            '4adbf07385bed6e24975cb44673551ecc393f1765206406f3a1ed51ffa367046')
+            '1642c64f2ad2929a602ab3c63e832c3ad3fab43ea636a6316c6de8308794b652')
 
 _args=(
     SYSCONFDIR=/etc
@@ -90,13 +76,6 @@ fi
 prepare(){
     cd "${srcdir}/${pkgbase}-${pkgver}"
     sed -i 's:0444:0644:' mk/sys.mk
-    patch -Np 1 -i ../gcc-10-fix.patch
-    patch -Np 1 -i ../supervise-daemon-fix.patch
-    patch -Np 1 -i ../openrc-shutdown-fix.patch
-    patch -Np 1 -i ../posix-compliant-grep.patch
-    patch -Np 1 -i ../binfmt-fix.patch
-    patch -Np 1 -i ../cgroup2-verify.patch
-    patch -Np 1 -i ../supervise-log.patch
 }
 
 check(){
@@ -110,7 +89,7 @@ build(){
 }
 
 package_openrc() {
-    depends=('psmisc' 'pam' 'netifrc' 'inetutils')
+    depends=('psmisc' 'pam' 'netifrc' 'inetutils' 'perl')
     optdepends=('networkmanager-openrc: networkmanager init script'
                 'elogind-openrc: elogind init script')
     backup=('etc/rc.conf'
