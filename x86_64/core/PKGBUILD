@@ -4,37 +4,37 @@
 
 _ever=1.1
 _eurl="https://gitea.artixlinux.org/artix/openrc-extra/archive"
+_aver=1.0
 _aurl="https://gitea.artixlinux.org/artix/alpm-hooks"
-_commit=3dc7ecf3fb340314a2ada79fe2f1dde738e6ede7
 
 pkgbase=openrc
 pkgname=('openrc' 'openrc-bash-completions' 'openrc-zsh-completions' 'openrc-deptree2dot')
-pkgver=0.44.4
+pkgver=0.44.5
 pkgrel=1
 pkgdesc="Gentoo's universal init system"
 arch=('x86_64')
 url="https://github.com/OpenRC/openrc"
 license=('BSD2')
-makedepends=('psmisc' 'netifrc' 'zsh' 'perl' 'git' 'meson')
+makedepends=('psmisc' 'netifrc' 'zsh' 'perl' 'meson')
 source=("${pkgbase}-${pkgver}.tar.gz::${url}/archive/${pkgver}.tar.gz"
         "${pkgbase}-extra-${_ever}.tar.gz::${_eurl}/${_ever}.tar.gz"
-        "git+${_aurl}.git#commit=${_commit}"
+        "alpm-hooks-${_aver}.tar.gz::${_aurl}/archive/${_aver}.tar.gz"
         'openrc.logrotate'
         'sysctl.conf'
         'artix-rc-conf.patch'
-        meson.patch::https://github.com/artix-linux/openrc/commit/89c42e7e0d8d5913789a76b007ed6a0c43078c63.patch)
-sha256sums=('01666bf68cc0151a13a0f77d595b606a751e5a78fae9b3b11a7e5980a88f2377'
+        'artix-meson.patch')
+sha256sums=('856ff0b180f6acdd6318d3b3302323dc1f3452d307b24e69a382ad8873349033'
             '36d5aaaab23f4ce9cdd8a0b558396b0a7f7469bc68987ffdaf9aad10ead85cba'
-            'SKIP'
+            '2bbbf26ed681420e7d2d4cde591786fed193dc38f43a6c5ab628f2cadc4f9191'
             '0b44210db9770588bd491cd6c0ac9412d99124c6be4c9d3f7d31ec8746072f5c'
             '874e50bd217fef3a2e3d0a18eb316b9b3ddb109b93f3cbf45407170c5bec1d6d'
             '8a256f18c25e67452e91b97f11b5eb2bb513f0014be069a6e8ba50e369f4d9b5'
-            'e138c6be00c6fb6d8e10ace4e4a9ca5de373c0c663ec2be016a84afeeb7ed484')
+            'ff2dcd965a2e542dc881e65cdb68611fe5a2da2dee70b1c92a0435475a8d3953')
 
 prepare(){
     cd "${pkgbase}-${pkgver}"
     patch -Np 1 -i ../artix-rc-conf.patch
-    patch -Np 1 -i ../meson.patch
+    patch -Np 1 -i ../artix-meson.patch
 }
 
 check(){
@@ -97,13 +97,13 @@ package_openrc() {
     # license
     install -Dm644 ${pkgbase}-${pkgver}/LICENSE "${pkgdir}"/usr/share/licenses/"${pkgbase}"/LICENSE
 
-    # pacman hooks
-    cd ${srcdir}/alpm-hooks
-    make DESTDIR="${pkgdir}" install_openrc
-
     # openrc extra; agetty,kmod,udev,tmpfiles,sysusers
     cd "${srcdir}/${pkgbase}-extra"
     make DESTDIR="${pkgdir}" install
+
+    # pacman hooks
+    cd ${srcdir}/alpm-hooks
+    make DESTDIR="${pkgdir}" install_openrc
 
     # split bash & zsh completions
     install -d "${srcdir}"/{_bash,_zsh}
