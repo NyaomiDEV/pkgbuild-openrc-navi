@@ -3,18 +3,18 @@
  2 files changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/meson.build b/meson.build
-index f3fc2ab4..f6564dd8 100644
+index d074946e..7cacb2b3 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -85,7 +85,7 @@ if os == 'Linux' and libexecdir == 'libexec'
+@@ -88,7 +88,7 @@ if os == 'Linux' and libexecdir == 'libexec'
    libexecdir = 'lib'
  endif
  libexecdir = rootprefix / libexecdir
 -rc_libexecdir = libexecdir / 'rc'
 +rc_libexecdir = libexecdir / get_option('librcdir')
+ rc_bindir = rc_libexecdir / 'bin'
+ rc_sbindir = rc_libexecdir / 'sbin'
  sbindir = rootprefix / get_option('sbindir')
-
- selinux_dep = dependency('libselinux', required : get_option('selinux'))
 diff --git a/meson_options.txt b/meson_options.txt
 index e4e7c4df..25d873d2 100644
 --- a/meson_options.txt
