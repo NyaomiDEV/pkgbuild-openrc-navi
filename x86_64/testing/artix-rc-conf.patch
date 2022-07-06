@@ -1,0 +1,34 @@
+etc/rc.conf | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/etc/rc.conf b/etc/rc.conf
+index 895641db..c28f1253 100644
+--- a/etc/rc.conf
++++ b/etc/rc.conf
+@@ -19,7 +19,7 @@
+ # If not specified we use $SHELL, otherwise the one specified in /etc/passwd,
+ # otherwise /bin/sh
+ # Linux users could specify /sbin/sulogin
+-#rc_shell=/bin/sh
++rc_shell=/usr/bin/sulogin
+
+ # Do we allow any started service in the runlevel to satisfy the dependency
+ # or do we want all of them regardless of state? For example, if net.eth0
+@@ -48,7 +48,7 @@
+ # /var/log/rc.log
+ # NOTE: Linux systems require the devfs service to be started before
+ # logging can take place and as such cannot log the sysinit runlevel.
+-#rc_logger="NO"
++rc_logger="YES"
+
+ # Through rc_log_path you can specify a custom log file.
+ # The default value is: /var/log/rc.log
+@@ -89,7 +89,7 @@
+ # There variables are shared between many init scripts
+
+ # Set unicode to YES to turn on unicode support for keyboards and screens.
+-#unicode="NO"
++unicode="YES"
+
+ # This is how long fuser should wait for a remote server to respond. The
+ # default is 60 seconds, but  it can be adjusted here.
