@@ -1,8 +1,8 @@
-etc/rc.conf | 6 +++---
+ etc/rc.conf | 6 +++---
  1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/etc/rc.conf b/etc/rc.conf
-index 895641db..c28f1253 100644
+index 0029d516..21c943f3 100644
 --- a/etc/rc.conf
 +++ b/etc/rc.conf
 @@ -19,7 +19,7 @@
@@ -26,8 +26,8 @@ index 895641db..c28f1253 100644
 @@ -89,7 +89,7 @@
  # There variables are shared between many init scripts
 
- # Set unicode to YES to turn on unicode support for keyboards and screens.
--#unicode="NO"
+ # Set unicode to NO to turn off unicode support for keyboards and screens.
+-#unicode="YES"
 +unicode="YES"
 
  # This is how long fuser should wait for a remote server to respond. The
