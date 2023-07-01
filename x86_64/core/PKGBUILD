@@ -10,7 +10,7 @@ _aurl="https://gitea.artixlinux.org/artix/alpm-hooks/archive"
 pkgbase=openrc
 pkgname=('openrc' 'openrc-bash-completions' 'openrc-zsh-completions' 'openrc-deptree2dot')
 pkgver=0.47.1
-pkgrel=1
+pkgrel=2
 pkgdesc="Gentoo's universal init system"
 arch=('x86_64')
 url="https://github.com/OpenRC/openrc"
@@ -67,7 +67,7 @@ build(){
 }
 
 package_openrc() {
-    depends=('psmisc' 'netifrc' 'inetutils')
+    depends=('glibc' 'psmisc' 'netifrc' 'inetutils' 'ncurses' 'bash' 'pam' 'libcap')
     optdepends=('networkmanager-openrc: networkmanager init script'
                 'elogind-openrc: elogind init script'
                 'openrc-deptree2dot: Graph the Dependency Tree')
