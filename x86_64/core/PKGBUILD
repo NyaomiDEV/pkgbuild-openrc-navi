@@ -9,8 +9,8 @@ _aurl="https://gitea.artixlinux.org/artix/alpm-hooks/archive"
 
 pkgbase=openrc
 pkgname=('openrc' 'openrc-bash-completions' 'openrc-zsh-completions' 'openrc-deptree2dot')
-pkgver=0.47.1
-pkgrel=2
+pkgver=0.48
+pkgrel=1
 pkgdesc="Gentoo's universal init system"
 arch=('x86_64')
 url="https://github.com/OpenRC/openrc"
@@ -24,7 +24,7 @@ source=("${pkgbase}-${pkgver}.tar.gz::${url}/archive/${pkgver}.tar.gz"
         'artix-rc-conf.patch'
         'artix-meson.patch')
 # options=(!emptydirs)
-sha256sums=('ea692bcf8c380fd0ed168e7bb24018bcae14208011eb31f10665a0d46593b202'
+sha256sums=('5027561f3cf2009f2d3635a3ba51003da436247f4a457661c612b66da7fd5fdd'
             '36d5aaaab23f4ce9cdd8a0b558396b0a7f7469bc68987ffdaf9aad10ead85cba'
             '5567af3637dba98a465485bb2e5876f0ff09b99fe0965ebc5d13420e4e2d5f8c'
             '0b44210db9770588bd491cd6c0ac9412d99124c6be4c9d3f7d31ec8746072f5c'
