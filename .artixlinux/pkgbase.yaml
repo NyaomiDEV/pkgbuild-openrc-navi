@@ -7,12 +7,12 @@ pkgbase:
   pkgname:
     - openrc
 actions:
-  addRepo: system-goblins
-  removeRepo: null
-  triggersBuild: true
+  addRepo: system
+  removeRepo: system-gremlins
+  triggersBuild: false
   triggersRebuild: false
   triggersRepoAdd: true
-  triggersRepoRemove: false
+  triggersRepoRemove: true
   triggersNoCheck: false
 repos:
   system-goblins:
@@ -23,12 +23,8 @@ repos:
     version: null
     packages: []
   system:
-    version: 0.48-1
-    packages:
-      - openrc-0.48-1-x86_64.pkg.tar.zst
-      - openrc-bash-completions-0.48-1-x86_64.pkg.tar.zst
-      - openrc-zsh-completions-0.48-1-x86_64.pkg.tar.zst
-      - openrc-deptree2dot-0.48-1-x86_64.pkg.tar.zst
+    version: null
+    packages: []
   world-goblins:
     version: null
     packages: []
