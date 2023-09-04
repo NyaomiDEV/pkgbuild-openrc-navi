@@ -7,8 +7,8 @@ pkgbase:
   pkgname:
     - openrc
 actions:
-  addRepo: system-gremlins
-  removeRepo: system-goblins
+  addRepo: system
+  removeRepo: system-gremlins
   triggersBuild: false
   triggersRebuild: false
   triggersRepoAdd: true
@@ -19,12 +19,12 @@ repos:
     version: null
     packages: []
   system-gremlins:
+    version: null
+    packages: []
+  system:
     version: 0.49-1
     packages:
       - openrc-0.49-1-x86_64.pkg.tar.zst
-  system:
-    version: null
-    packages: []
   world-goblins:
     version: null
     packages: []
