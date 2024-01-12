@@ -7,7 +7,7 @@ _extras=1.2 # git rev-parse ${_extras} #79d369b5089c1af77289ebe1e2cf711f6f7a5e28
 _alpm=1.4 # git rev-parse ${_alpm} #83961019292a041e1d2c07389d639065632e3f1f
 
 pkgname=openrc
-pkgver=0.52.1
+pkgver=0.53
 pkgrel=1
 pkgdesc="Gentoo's universal init system"
 arch=('x86_64')
@@ -40,7 +40,7 @@ source=("${pkgname}-${pkgver}.tar.gz::${url}/archive/refs/tags/${pkgver}.tar.gz"
         "artix-meson.patch::${_url}/openrc/commit/05b1fd974c71041265a862ca3a2ba4fc79e797cc.patch"
         "git+${_url}/openrc-extra.git#tag=${_extras}"
         "git+${_url}/alpm-hooks.git#tag=${_alpm}")
-sha256sums=('0b911eee4e64ad5e6945c6fed572220d537dfd0108838fa6d6797a2d7ff9f052'
+sha256sums=('6efc5cf49f5fea73271a5403f2d1b68198e1bb70af052bc6fd3d97825fb087ec'
             '0b44210db9770588bd491cd6c0ac9412d99124c6be4c9d3f7d31ec8746072f5c'
             '874e50bd217fef3a2e3d0a18eb316b9b3ddb109b93f3cbf45407170c5bec1d6d'
             '9420304937ca075714fa3d5deefda5b2bd51ee7398f90ba8ca49594f07baef7a'
