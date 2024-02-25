@@ -8,11 +8,11 @@ _alpm=1.4 # git rev-parse ${_alpm} #83961019292a041e1d2c07389d639065632e3f1f
 
 pkgname=openrc
 pkgver=0.53
-pkgrel=1
+pkgrel=2
 pkgdesc="Gentoo's universal init system"
 arch=('x86_64')
 url="https://github.com/OpenRC/openrc"
-license=('BSD2')
+license=('BSD-2-Clause')
 makedepends=('git' 'meson')
 depends=('bash' 'glibc' 'inetutils' 'libcap' 'libcap.so'
          'ncurses' 'libncursesw.so' 'netifrc' 'pam' 'libpam.so' 'psmisc' 'perl')
