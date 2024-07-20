@@ -1,17 +1,20 @@
 # Maintainer: artoo <artoo@artixlinux.org>
 # Maintainer: Chris Cromer <cromer@artixlinux.org>
+# Maintainer: Naomi Calabretta <me@nyaomi.xyz>
 # Contributor: williamh <williamh@gentoo.org>
 
 _url=https://gitea.artixlinux.org/artix
 _extras=1.2
 _alpm=1.4
 
+_pkgver=0.60-beta
+
 pkgname=openrc
-pkgver=0.54
+pkgver=${_pkgver%-beta}
 pkgrel=1
-pkgdesc="Gentoo's universal init system"
+pkgdesc="Gentoo's universal init system - navi's fork"
 arch=('x86_64')
-url="https://github.com/OpenRC/openrc"
+url="https://github.com/navi-desu/openrc"
 license=('BSD-2-Clause')
 makedepends=('git' 'meson')
 depends=(
@@ -51,7 +54,7 @@ backup=(
     'etc/conf.d/agetty.tty'{1,2,3,4,5,6}
 )
 source=(
-    "${pkgname}-${pkgver}.tar.gz::${url}/archive/refs/tags/${pkgver}.tar.gz"
+    "${pkgname}-${_pkgver}.tar.gz::${url}/archive/refs/tags/${_pkgver}.tar.gz"
     'openrc.logrotate'
     'sysctl.conf'
     "rc-conf-artix.patch::${_url}/openrc/commit/6f9e4c6b4bebebad2f00d1c19bf1f93c707d9a09.patch"
@@ -59,7 +62,7 @@ source=(
     "git+${_url}/openrc-extra.git#tag=${_extras}"
     "git+${_url}/alpm-hooks.git#tag=${_alpm}"
 )
-sha256sums=('c84ff1d8e468c043fe136d11d3d34d6bb28328267d1352526a5d18cdf4c60fb0'
+sha256sums=('ac03d1a78547ad324effde4bf142e95528d8ca82181733a5751a1c305d2c605c'
             '0b44210db9770588bd491cd6c0ac9412d99124c6be4c9d3f7d31ec8746072f5c'
             '874e50bd217fef3a2e3d0a18eb316b9b3ddb109b93f3cbf45407170c5bec1d6d'
             'e8f5374e4efd64db07a8f352a10da065e9393761faf64b7f26aba1928d4286af'
@@ -68,7 +71,7 @@ sha256sums=('c84ff1d8e468c043fe136d11d3d34d6bb28328267d1352526a5d18cdf4c60fb0'
             '8cd1cb0f89c4afe85cd286a10647f18e4443faed58f663ec3da39fa4cd807512')
 
 prepare() {
-    cd "${pkgname}-${pkgver}"
+    cd "${pkgname}-${_pkgver}"
     # apply patch from the source array (should be a pacman feature)
     local src
     for src in "${source[@]}"; do
@@ -102,7 +105,7 @@ build(){
         -Dlibrcdir=openrc
     )
 
-    artix-meson "${pkgname}-${pkgver}" build "${_meson_options[@]}"
+    artix-meson "${pkgname}-${_pkgver}" build "${_meson_options[@]}"
 
     meson compile -C build
 }
@@ -118,7 +121,7 @@ package() {
     install -m755 "${srcdir}"/sysctl.conf "${pkgdir}"/usr/lib/sysctl.d/50-default.conf
 
     # license
-    install -Dm644 "${pkgname}-${pkgver}"/LICENSE "${pkgdir}"/usr/share/licenses/"${pkgname}"/LICENSE
+    install -Dm644 "${pkgname}-${_pkgver}"/LICENSE "${pkgdir}"/usr/share/licenses/"${pkgname}"/LICENSE
 
     # openrc extra; agetty,kmod,udev,tmpfiles,sysusers
     make -C "${pkgname}"-extra DESTDIR="${pkgdir}" install
@@ -132,5 +135,5 @@ package() {
     # remove init symlink
     rm -v "${pkgdir}"/usr/bin/init
 
-    install -m755 "${pkgname}-${pkgver}"/support/deptree2dot/deptree2dot "${pkgdir}"/usr/bin/deptree2dot
+    install -m755 "${pkgname}-${_pkgver}"/support/deptree2dot/deptree2dot "${pkgdir}"/usr/bin/deptree2dot
 }
