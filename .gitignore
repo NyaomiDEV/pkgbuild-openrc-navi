@@ -34,3 +34,9 @@ src/
 *.service
 *.timer
 *.socket
+
+# ---> specific to this project
+alpm-hooks/
+artix-meson.patch
+openrc-extra/
+rc-conf-artix.patch

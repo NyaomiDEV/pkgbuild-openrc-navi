@@ -11,7 +11,7 @@ _pkgver=0.60-beta
 
 pkgname=openrc
 pkgver=${_pkgver%-beta}
-pkgrel=1
+pkgrel=2
 pkgdesc="Gentoo's universal init system - navi's fork"
 arch=('x86_64')
 url="https://github.com/navi-desu/openrc"
@@ -117,6 +117,9 @@ package() {
 
     install -d "${pkgdir}"/usr/lib/{openrc/cache,binfmt.d,sysctl.d}
 
+    # user service directory
+    install -d "${pkgdir}"/etc/user.d/init.d
+
     # sysctl defaults
     install -m755 "${srcdir}"/sysctl.conf "${pkgdir}"/usr/lib/sysctl.d/50-default.conf
 
@@ -129,7 +132,7 @@ package() {
     # pacman hooks
     make -C alpm-hooks DESTDIR="${pkgdir}" install_openrc
 
-    # remove suport dir
+    # remove support dir
     rm -r "${pkgdir}"/usr/share/openrc
 
     # remove init symlink
