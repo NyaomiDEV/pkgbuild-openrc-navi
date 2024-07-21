@@ -10,7 +10,7 @@ _alpm=1.4
 _pkgname=openrc
 
 pkgname=${_pkgname}-navi-git
-pkgver=0.60
+pkgver=0.60.beta3.r0.gfdb1d0d6
 pkgrel=1
 pkgdesc="Gentoo's universal init system - navi's fork (git version)"
 arch=('x86_64')
@@ -72,6 +72,11 @@ sha256sums=(
     '88c2ddad5ac5d347962ce9805a0ed7a4f1737aaafa3d6a8c0a7a55009ce5fef1'
     '8cd1cb0f89c4afe85cd286a10647f18e4443faed58f663ec3da39fa4cd807512'
 )
+
+pkgver() {
+    cd "${_pkgname}"
+    printf "%s" "$(git describe --long --tags | sed 's/^v//;s/\([^-]*-g\)/r\1/;s/-/./g')"
+}
 
 prepare() {
     cd "${_pkgname}"
