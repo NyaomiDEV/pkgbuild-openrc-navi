@@ -7,11 +7,12 @@ _url=https://gitea.artixlinux.org/artix
 _extras=1.2
 _alpm=1.4
 
+_pkgname=openrc
 _pkgver=0.60-beta
 
-pkgname=openrc
+pkgname=${_pkgname}-navi
 pkgver=${_pkgver%-beta}
-pkgrel=2
+pkgrel=1
 pkgdesc="Gentoo's universal init system - navi's fork"
 arch=('x86_64')
 url="https://github.com/navi-desu/openrc"
@@ -32,12 +33,13 @@ optdepends=(
     'elogind-openrc: elogind init script'
 )
 provides=(
+    'openrc'
     'init-rc'
     'svc-manager'
     'librc.so'
     'libeinfo.so'
 )
-conflicts=('init-rc' 'svc-manager')
+conflicts=('init-rc' 'svc-manager' 'openrc')
 replaces=(openrc-{deptree2dot,{bash,zsh}-completions})
 backup=(
     'etc/rc.conf'
@@ -54,7 +56,7 @@ backup=(
     'etc/conf.d/agetty.tty'{1,2,3,4,5,6}
 )
 source=(
-    "${pkgname}-${_pkgver}.tar.gz::${url}/archive/refs/tags/${_pkgver}.tar.gz"
+    "${_pkgname}-${_pkgver}.tar.gz::${url}/archive/refs/tags/${_pkgver}.tar.gz"
     'openrc.logrotate'
     'sysctl.conf'
     "rc-conf-artix.patch::${_url}/openrc/commit/6f9e4c6b4bebebad2f00d1c19bf1f93c707d9a09.patch"
@@ -71,7 +73,7 @@ sha256sums=('ac03d1a78547ad324effde4bf142e95528d8ca82181733a5751a1c305d2c605c'
             '8cd1cb0f89c4afe85cd286a10647f18e4443faed58f663ec3da39fa4cd807512')
 
 prepare() {
-    cd "${pkgname}-${_pkgver}"
+    cd "${_pkgname}-${_pkgver}"
     # apply patch from the source array (should be a pacman feature)
     local src
     for src in "${source[@]}"; do
@@ -105,7 +107,7 @@ build(){
         -Dlibrcdir=openrc
     )
 
-    artix-meson "${pkgname}-${_pkgver}" build "${_meson_options[@]}"
+    artix-meson "${_pkgname}-${_pkgver}" build "${_meson_options[@]}"
 
     meson compile -C build
 }
@@ -113,7 +115,7 @@ build(){
 package() {
     meson install -C build --destdir "${pkgdir}"
 
-    install -Dm644 "${srcdir}/${pkgname}".logrotate "${pkgdir}"/etc/logrotate.d/"${pkgname}"
+    install -Dm644 "${srcdir}/${_pkgname}".logrotate "${pkgdir}"/etc/logrotate.d/"${_pkgname}"
 
     install -d "${pkgdir}"/usr/lib/{openrc/cache,binfmt.d,sysctl.d}
 
@@ -124,10 +126,10 @@ package() {
     install -m755 "${srcdir}"/sysctl.conf "${pkgdir}"/usr/lib/sysctl.d/50-default.conf
 
     # license
-    install -Dm644 "${pkgname}-${_pkgver}"/LICENSE "${pkgdir}"/usr/share/licenses/"${pkgname}"/LICENSE
+    install -Dm644 "${_pkgname}-${_pkgver}"/LICENSE "${pkgdir}"/usr/share/licenses/"${_pkgname}"/LICENSE
 
     # openrc extra; agetty,kmod,udev,tmpfiles,sysusers
-    make -C "${pkgname}"-extra DESTDIR="${pkgdir}" install
+    make -C "${_pkgname}"-extra DESTDIR="${pkgdir}" install
 
     # pacman hooks
     make -C alpm-hooks DESTDIR="${pkgdir}" install_openrc
@@ -138,5 +140,5 @@ package() {
     # remove init symlink
     rm -v "${pkgdir}"/usr/bin/init
 
-    install -m755 "${pkgname}-${_pkgver}"/support/deptree2dot/deptree2dot "${pkgdir}"/usr/bin/deptree2dot
+    install -m755 "${_pkgname}-${_pkgver}"/support/deptree2dot/deptree2dot "${pkgdir}"/usr/bin/deptree2dot
 }
