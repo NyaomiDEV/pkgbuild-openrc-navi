@@ -8,10 +8,10 @@ _extras=1.2
 _alpm=1.4
 
 _pkgname=openrc
-_pkgver=0.60-beta
+_pkgver=0.60-beta3
 
 pkgname=${_pkgname}-navi
-pkgver=${_pkgver%-beta}
+pkgver=${_pkgver%-beta*}.${_pkgver#*beta} # <major/minor>.<beta level>
 pkgrel=1
 pkgdesc="Gentoo's universal init system - navi's fork"
 arch=('x86_64')
@@ -64,13 +64,15 @@ source=(
     "git+${_url}/openrc-extra.git#tag=${_extras}"
     "git+${_url}/alpm-hooks.git#tag=${_alpm}"
 )
-sha256sums=('ac03d1a78547ad324effde4bf142e95528d8ca82181733a5751a1c305d2c605c'
-            '0b44210db9770588bd491cd6c0ac9412d99124c6be4c9d3f7d31ec8746072f5c'
-            '874e50bd217fef3a2e3d0a18eb316b9b3ddb109b93f3cbf45407170c5bec1d6d'
-            'e8f5374e4efd64db07a8f352a10da065e9393761faf64b7f26aba1928d4286af'
-            '3924bfe28ef14f2d20c03675f246ffb4fdc83f6a5b80f4b3bda0d5e7a14303ef'
-            '88c2ddad5ac5d347962ce9805a0ed7a4f1737aaafa3d6a8c0a7a55009ce5fef1'
-            '8cd1cb0f89c4afe85cd286a10647f18e4443faed58f663ec3da39fa4cd807512')
+sha256sums=(
+    'db1eb08edbea398f458a9222c3be0079bd23fe56dc0b5abc8bf48150b701be3d'
+    '0b44210db9770588bd491cd6c0ac9412d99124c6be4c9d3f7d31ec8746072f5c'
+    '874e50bd217fef3a2e3d0a18eb316b9b3ddb109b93f3cbf45407170c5bec1d6d'
+    'e8f5374e4efd64db07a8f352a10da065e9393761faf64b7f26aba1928d4286af'
+    '3924bfe28ef14f2d20c03675f246ffb4fdc83f6a5b80f4b3bda0d5e7a14303ef'
+    '88c2ddad5ac5d347962ce9805a0ed7a4f1737aaafa3d6a8c0a7a55009ce5fef1'
+    '8cd1cb0f89c4afe85cd286a10647f18e4443faed58f663ec3da39fa4cd807512'
+)
 
 prepare() {
     cd "${_pkgname}-${_pkgver}"
