@@ -36,6 +36,7 @@ src/
 *.socket
 
 # ---> specific to this project
+openrc/
 alpm-hooks/
 artix-meson.patch
 openrc-extra/

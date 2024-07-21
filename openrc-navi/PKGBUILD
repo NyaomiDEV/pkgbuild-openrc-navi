@@ -12,7 +12,7 @@ _pkgver=0.60-beta3
 
 pkgname=${_pkgname}-navi
 pkgver=${_pkgver%-beta*}.${_pkgver#*beta} # <major/minor>.<beta level>
-pkgrel=1
+pkgrel=2
 pkgdesc="Gentoo's universal init system - navi's fork"
 arch=('x86_64')
 url="https://github.com/navi-desu/openrc"
@@ -39,7 +39,7 @@ provides=(
     'librc.so'
     'libeinfo.so'
 )
-conflicts=('init-rc' 'svc-manager' 'openrc')
+conflicts=('init-rc' 'svc-manager' 'openrc' 'openrc-navi-git')
 replaces=(openrc-{deptree2dot,{bash,zsh}-completions})
 backup=(
     'etc/rc.conf'
